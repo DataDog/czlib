@@ -4,7 +4,6 @@ package czlib
 
 import (
 	"errors"
-	"reflect"
 	"unsafe"
 )
 
@@ -24,21 +23,22 @@ type UnsafeByte []byte
 // NewUnsafeByte creates a []byte from the unsafe pointer without a copy,
 // using the method outlined in this mailing list post:
 //   https://groups.google.com/forum/#!topic/golang-nuts/KyXR0fDp0HA
+// but amended to use the three-index slices from go1.2 to set the capacity
+// of b correctly:
+//   https://tip.golang.org/doc/go1.2#three_index
+// This means this code only works in go1.2+.
+//
 // This shouldn't copy the underlying array;  it's just casting it
 // Afterwards, we use reflect to fix the Cap & len of the slice.
 func NewUnsafeByte(p *C.char, length int) UnsafeByte {
 	var b UnsafeByte
-	b = UnsafeByte((*[1 << 30]byte)(unsafe.Pointer(p))[0:length])
-	/* fix the cap/len */
-	header := (*reflect.SliceHeader)(unsafe.Pointer(&b))
-	header.Cap = length
-	header.Len = length
+	b = UnsafeByte((*[1<<31 - 1]byte)(unsafe.Pointer(p))[:length:length])
 	return b
 }
 
 // Free the underlying byte array;  doing this twice would be bad.
-func (b *UnsafeByte) Free() {
-	C.free(unsafe.Pointer(&(*b)[0]))
+func (b UnsafeByte) Free() {
+	C.free(unsafe.Pointer(&b[0]))
 }
 
 // Compress returns the input compressed using zlib, or an error if encountered.

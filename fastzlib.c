@@ -5,7 +5,7 @@
  *
  * Hopefully this will perform very similarly to Python's zlib module,
  * as both vitess' cgzip and compress/zlib perform between very and
- * quite poorly in comparisson.
+ * quite poorly in comparisson on small payloads.
  */
 #include "_cgo_export.h"
 #include <stdio.h>
