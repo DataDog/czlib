@@ -68,6 +68,18 @@ func TestAllZlib(t *testing.T) {
 	}
 }
 
+func TestEmpty(t *testing.T) {
+	var empty []byte
+	_, err := Compress(empty)
+	if err != nil {
+		t.Fatalf("unexpected error compressing empty slice")
+	}
+	_, err = Decompress(empty)
+	if err == nil {
+		t.Fatalf("unexpected success decompressing empty slice")
+	}
+}
+
 func TestUnsafeZlib(t *testing.T) {
 	for _, i := range []int{10, 128, 1000, 1024 * 10, 1024 * 100, 1024 * 1024, 1024 * 1024 * 7} {
 		data, err := genData(i)
