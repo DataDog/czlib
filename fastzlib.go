@@ -43,7 +43,10 @@ func (b UnsafeByte) Free() {
 
 // Compress returns the input compressed using zlib, or an error if encountered.
 func Compress(input []byte) ([]byte, error) {
-	cInput := (*C.char)(unsafe.Pointer(&input[0]))
+	var cInput *C.char
+	if len(input) != 0 {
+		cInput = (*C.char)(unsafe.Pointer(&input[0]))
+	}
 	ret := C.c_compress2(cInput, C.uint(len(input)))
 
 	// if there was an error compressing, return it and free the original message
@@ -62,8 +65,11 @@ func Compress(input []byte) ([]byte, error) {
 
 // Decompress returns the input decompressed using zlib, or an error if encountered.
 func Decompress(input []byte) ([]byte, error) {
+	var cInput *C.char
+	if len(input) != 0 {
+		cInput = (*C.char)(unsafe.Pointer(&input[0]))
+	}
 	// send the input byte without copying iy
-	cInput := (*C.char)(unsafe.Pointer(&input[0]))
 	ret := C.c_decompress(cInput, C.uint(len(input)))
 
 	// if there was an error decompressing, return it and free the original message
