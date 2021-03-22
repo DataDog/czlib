@@ -6,6 +6,8 @@ jobs:
       - image: circleci/golang:1.14
     steps:
       - checkout
+      - run: 'sudo apt-get update'
+      - run: 'sudo apt-get install -y zlib1g-dev'
       - run: 'wget https://github.com/DataDog/zstd/files/2246767/mr.zip'
       - run: 'unzip mr.zip'
       - run: 'go build'
@@ -16,6 +18,8 @@ jobs:
       - image: circleci/golang:1.15
     steps:
       - checkout
+      - run: 'sudo apt-get update'
+      - run: 'sudo apt-get install -y zlib1g-dev'
       - run: 'wget https://github.com/DataDog/zstd/files/2246767/mr.zip'
       - run: 'unzip mr.zip'
       - run: 'go build'
@@ -26,6 +30,8 @@ jobs:
       - image: circleci/golang:latest
     steps:
       - checkout
+      - run: 'sudo apt-get update'
+      - run: 'sudo apt-get install -y zlib1g-dev'
       - run: 'wget https://github.com/DataDog/zstd/files/2246767/mr.zip'
       - run: 'unzip mr.zip'
       - run: 'go build'
