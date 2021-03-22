@@ -8,7 +8,7 @@ import (
 )
 
 /*
-#cgo LDFLAGS: -lz
+#cgo pkg-config: zlib
 #include "fastzlib.h"
 #include <stdlib.h>
 */
