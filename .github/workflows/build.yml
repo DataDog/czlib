@@ -23,9 +23,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
 
       - name: Install zlib
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y zlib1g-dev
+        run: sudo apt-get update && sudo apt-get install -y zlib1g-dev
 
       - name: Download test payload
         run: |
@@ -36,7 +34,7 @@ jobs:
         run: go build
 
       - name: Test
-        run: PAYLOAD=`pwd`/mr go test -v
+        run: PAYLOAD=$(pwd)/mr go test -v
 
       - name: Benchmark
-        run: PAYLOAD=`pwd`/mr go test -bench .
+        run: PAYLOAD=$(pwd)/mr go test -bench .
